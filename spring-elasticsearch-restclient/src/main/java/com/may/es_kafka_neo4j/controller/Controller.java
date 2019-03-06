@@ -1,7 +1,6 @@
-package com.journaldev.elasticsearch.controller;
+package com.may.es_kafka_neo4j.controller;
 
-import com.journaldev.elasticsearch.dao.EsRepository;
-import org.apache.kafka.clients.producer.ProducerRecord;
+import com.may.es_kafka_neo4j.Repository.EsRepository;
 import org.elasticsearch.common.bytes.BytesReference;
 import org.elasticsearch.common.io.stream.BytesStreamOutput;
 import org.elasticsearch.search.SearchHit;
@@ -28,7 +27,6 @@ public class Controller {
     public Controller(EsRepository esRepository) {
         this.esRepository = esRepository;
     }
-
 
     @GetMapping("/{index}")
     public String getBookById(@PathVariable String index) throws IOException {

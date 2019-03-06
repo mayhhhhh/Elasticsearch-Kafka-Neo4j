@@ -1,4 +1,4 @@
-package com.journaldev.elasticsearch.config;
+package com.may.es_kafka_neo4j.config;
 
 
 import org.apache.kafka.clients.producer.ProducerConfig;

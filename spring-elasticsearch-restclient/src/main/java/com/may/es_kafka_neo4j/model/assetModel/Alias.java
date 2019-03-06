@@ -1,7 +1,8 @@
-package may.neo4j.neo4j.model;
+package com.may.es_kafka_neo4j.model.assetModel;
 
+import com.may.es_kafka_neo4j.config.CustomIdStrategy;
 import lombok.*;
-import may.neo4j.neo4j.constants.assetConsts;
+import com.may.es_kafka_neo4j.constants.assetConsts;
 import org.neo4j.ogm.annotation.GeneratedValue;
 import org.neo4j.ogm.annotation.Id;
 import org.neo4j.ogm.annotation.NodeEntity;
@@ -15,16 +16,16 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @NodeEntity
-public class Organization {
+public class Alias {
 
     @Id
-    @GeneratedValue
-    private Long id;
+    @GeneratedValue(strategy = CustomIdStrategy.class)
+    private String id;
 
     @NonNull
-    private String organization;
+    private String alias;
 
-    @Relationship(assetConsts.R_HAS_ASSET)
+    @Relationship(assetConsts.R_HAS_ALIAS_OF)
     @NonNull
     private List<Asset> assets;
 }

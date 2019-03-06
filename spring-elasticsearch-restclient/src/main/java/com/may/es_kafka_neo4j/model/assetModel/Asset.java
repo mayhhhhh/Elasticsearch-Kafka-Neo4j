@@ -1,7 +1,8 @@
-package may.neo4j.neo4j.model;
+package com.may.es_kafka_neo4j.model.assetModel;
 
+import com.may.es_kafka_neo4j.config.CustomIdStrategy;
+import com.may.es_kafka_neo4j.constants.assetConsts;
 import lombok.*;
-import may.neo4j.neo4j.constants.assetConsts;
 import org.neo4j.ogm.annotation.*;
 
 @Data
@@ -13,8 +14,8 @@ import org.neo4j.ogm.annotation.*;
 public class Asset {
 
     @Id
-    @GeneratedValue
-    private Long id;
+    @GeneratedValue(strategy = CustomIdStrategy.class)
+    private String id;
 
     @NonNull
     private String asset;

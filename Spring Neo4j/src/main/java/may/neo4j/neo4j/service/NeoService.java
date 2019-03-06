@@ -42,10 +42,10 @@ public class NeoService {
         hostRepository.save(host_2);
         hostRepository.save(host_3);
 
-        Asset asset_1 = Asset.of("device");
-        Asset asset_2 = Asset.of("person");
-        aliasRepository.save(asset_1);
-        aliasRepository.save(asset_2);
+        Asset asset_1 = Asset.of("device", ip_1);
+        Asset asset_2 = Asset.of("person", ip_3);
+        assetRepository.save(asset_1);
+        assetRepository.save(asset_2);
 
 
         Alias alias_1 = Alias.of("dbprod2$", Lists.newArrayList(asset_1, asset_2));
@@ -58,7 +58,10 @@ public class NeoService {
 
         Organization organization_1 = Organization.of("siem_asset_service", Lists.newArrayList(asset_1, asset_2));
         organizationRepository.save(organization_1);
+    }
 
-
+    @Transactional
+    public void saveData(){
+        Ip curr_ip = Ip.of()
     }
 }

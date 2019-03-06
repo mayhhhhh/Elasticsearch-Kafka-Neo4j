@@ -1,4 +1,5 @@
-package may.neo4j.neo4j.constants;
+package com.may.es_kafka_neo4j.constants;
+
 
 public interface assetConsts {
 

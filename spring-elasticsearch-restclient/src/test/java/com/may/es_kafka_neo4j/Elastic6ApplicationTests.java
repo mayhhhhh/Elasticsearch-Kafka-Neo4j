@@ -1,4 +1,4 @@
-package com.journaldev.elasticsearch;
+package com.may.es_kafka_neo4j;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

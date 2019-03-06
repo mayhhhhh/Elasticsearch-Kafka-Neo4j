@@ -24,7 +24,7 @@ public class Alias {
     @NonNull
     private String alias;
 
-    @Relationship(assetConsts.R_RESOLVES_TO)
+    @Relationship(assetConsts.R_HAS_ALIAS_OF)
     @NonNull
     private List<Asset> assets;
 }

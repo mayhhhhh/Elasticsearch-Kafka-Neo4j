@@ -1,4 +1,4 @@
-package com.journaldev.elasticsearch.dao;
+package com.may.es_kafka_neo4j.Repository;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.elasticsearch.action.search.*;
@@ -19,7 +19,7 @@ public class EsRepository {
 
     private final String INDEX_ASSET = "asset-v2.0";
     private final String INDEX_FINDING = "finding-v2.0";
-    private final String INDEX_EVENT = "";
+    private final String INDEX_EVENT = "siem_meta_events_week_2018_50";
 
     //private final String TYPE = "device";
 
@@ -42,6 +42,10 @@ public class EsRepository {
         if(index.equals("finding")) {
             searchRequest = new SearchRequest(INDEX_FINDING);
             System.out.println("set finding");
+        }
+        if(index.equals("event")) {
+            searchRequest = new SearchRequest(INDEX_EVENT);
+            System.out.println("set event");
         }
         searchRequest.scroll(scroll);
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
@@ -72,7 +76,7 @@ public class EsRepository {
             scrollId = searchResponse.getScrollId();
             searchHits = searchResponse.getHits().getHits();
 
-            System.out.println("searchHits: " + count);
+            //System.out.println("searchHits: " + count);
         }
         System.out.println("end time: " + System.currentTimeMillis());
         ClearScrollRequest clearScrollRequest = new ClearScrollRequest();

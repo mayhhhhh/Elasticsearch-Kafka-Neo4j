@@ -1,20 +1,22 @@
-package com.journaldev.elasticsearch.dao;
+package com.may.es_kafka_neo4j.controller;
 
+import com.may.es_kafka_neo4j.Service.NeoService;
 import org.elasticsearch.common.io.stream.StreamInput;
 import org.elasticsearch.search.SearchHit;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class kafkaConsumer {
+
+    @Autowired
+    private NeoService neoService;
 
     //    @KafkaListener(topics = "assets", group = "assetsConsumer",
 //            containerFactory = "assetsKafkaListenerFactory")
@@ -42,7 +44,7 @@ public class kafkaConsumer {
 
 
     public void consume(byte[] msg, String type){
-        String filePath = "/users/chenyu.sun/Downloads/spring-elasticsearch-restclient/es" + type + "result.txt";
+        String filePath = "/users/chenyu.sun/Desktop/ES_result/es" + type + "result.txt";
         StreamInput in = StreamInput.wrap(msg);
         SearchHit recover = null;
         List<SearchHit> searchHits = new ArrayList<>();
@@ -56,6 +58,31 @@ public class kafkaConsumer {
         } catch (IOException e) {
             System.out.println("ERROR EOF");
         }
+        //trial
+        SearchHit hit = searchHits.get(0);
+        Map<String, Object> map = hit.getSourceAsMap();
+        if(type.equals("Assets")) {
+            String ip = map.get("ips").toString();
+            String alias = map.get("aliases").toString();
+            String org = map.get("org_id").toString();
+            String asset = map.get("type").toString();
+            String host = map.get("hosts").toString();
+
+            neoService.saveAssetData(ip, host, org, asset, alias);
+        }
+
+        if(type.equals("Events")){
+            if(hit.getType().equals("meta_event")) {
+                String s_ip = map.get("s_ip").toString();
+                String t_ip = map.get("t_ip").toString();
+                String g_ip = map.get("g_ip").toString();
+                String e_id = map.get("id").toString();
+
+                neoService.saveEventData(e_id, s_ip, t_ip, g_ip);
+            }
+        }
+
+
         String text = searchHits.get(0).toString();
 //        System.out.println(text);
         try(FileWriter fw = new FileWriter(filePath, true);

@@ -1,4 +1,4 @@
-package com.journaldev.elasticsearch.config;
+package com.may.es_kafka_neo4j.config;
 
 import org.apache.http.HttpHost;
 import org.apache.http.client.config.RequestConfig;
