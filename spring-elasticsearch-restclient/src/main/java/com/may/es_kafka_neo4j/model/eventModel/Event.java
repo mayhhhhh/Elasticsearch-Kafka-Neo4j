@@ -35,4 +35,20 @@ public class Event {
     @NonNull
     private GeneratorField generatorField;
 
+    @Relationship(eventConsts.R_HAS_OBJECT)
+    @NonNull
+    private Descriptors descriptors;
+
+//    @Relationship(eventConsts.R_HAS_SOURCE)
+//    @NonNull
+//    private Ip s_ip;
+//
+//    @Relationship(eventConsts.R_HAS_TARGET)
+//    @NonNull
+//    private Ip t_ip;
+//
+//    @Relationship(eventConsts.R_HAS_GENERATOR)
+//    @NonNull
+//    private Ip g_ip;
+
 }

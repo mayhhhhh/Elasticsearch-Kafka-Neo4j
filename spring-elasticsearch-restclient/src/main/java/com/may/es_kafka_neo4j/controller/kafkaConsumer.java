@@ -35,7 +35,7 @@ public class kafkaConsumer {
 
     }
 
-    @KafkaListener(topics = "event_trial_34",
+    @KafkaListener(topics = "event_trial_311_1",
             containerFactory = "eventsKafkaListenerFactory")
     public void consumeEvents(byte[] eventmsg) {
         consume(eventmsg, "Events");
@@ -68,17 +68,41 @@ public class kafkaConsumer {
             String asset = map.get("type").toString();
             String host = map.get("hosts").toString();
 
-            neoService.saveAssetData(ip, host, org, asset, alias);
+            //neoService.saveAssetData(ip, host, org, asset, alias);
         }
 
         if(type.equals("Events")){
             if(hit.getType().equals("meta_event")) {
-                String s_ip = map.get("s_ip").toString();
-                String t_ip = map.get("t_ip").toString();
-                String g_ip = map.get("g_ip").toString();
+                String s_ip = (map.get("s_ip") != null) ? map.get("s_ip").toString() : "Empty_s_ip";
+                String s_hostname = (map.get("s_hostname") != null) ? map.get("s_hostname").toString() : "Empty_s_hostname";
+                String s_port = (map.get("s_port") != null) ? map.get("s_port").toString() : "Empty_s_port";
+                String s_zone_name = (map.get("s_zone_name") != null) ? map.get("s_zone_name").toString() : "Empty_s_zone_name";
+                String s_zone_id = (map.get("s_zone_id") != null) ? map.get("s_zone_id").toString() : "Empty_s_zone_id";
+                String t_ip = (map.get("t_ip") != null) ? map.get("t_ip").toString() : "Empty_t_ip";
+                String t_hostname = (map.get("t_hostname") != null) ? map.get("t_hostname").toString() : "Empty_t_hostname";
+                String t_port = (map.get("t_port") != null) ? map.get("t_port").toString() : "Empty_t_port";
+                String t_zone_name = (map.get("t_zone_name") != null) ? map.get("t_zone_name").toString() : "Empty_t_zone_name";
+                String t_zone_id = (map.get("t_zone_id") != null) ? map.get("t_zone_id").toString() : "Empty_t_zone_id";
+                String g_ip = (map.get("g_ip") != null) ? map.get("g_ip").toString() : "Empty_g_ip";
+                String g_hostname = (map.get("g_hostname") != null) ? map.get("g_hostname").toString() : "Empty_g_hostname";
+                //String g_port = map.get("g_port").toString();
+                String g_port = (map.get("g_port") != null) ? map.get("g_port").toString() : "Empty_g_port";
+                //String g_zone_name = map.get("g_zone_name").toString();
+                String g_zone_name = (map.get("g_zone_name") != null) ? map.get("g_zone_name").toString() : "Empty_g_zone_name";
+                String g_zone_id = (map.get("g_zone_id") != null) ? map.get("g_zone_id").toString() : "Empty_g_zone_id";
+                String device_id = (map.get("device_id") != null) ? map.get("device_id").toString() : "Empty_device_id";
+                String device_name = (map.get("dyn_string_device_name") != null) ? map.get("dyn_string_device_name").toString() : "Empty_device_name";
+                String sourceSystem = (map.get("dyn_string_source_system") != null) ? map.get("dyn_string_source_system").toString() : "Empty source_system";
+                String object_name = (map.get("object_name") != null) ? map.get("object_name").toString() : "Empty_object_name";
+                String object_type = (map.get("object_type") != null) ? map.get("object_type").toString() : "Empty_object_type";
+
+
                 String e_id = map.get("id").toString();
 
-                neoService.saveEventData(e_id, s_ip, t_ip, g_ip);
+                neoService.saveEventData(e_id, s_ip, s_hostname, s_port, s_zone_id, s_zone_name,
+                        t_ip, t_hostname, t_port, t_zone_id, t_zone_name,
+                        g_ip, g_hostname, g_port, g_zone_id, g_zone_name,
+                        device_name, device_id, sourceSystem, object_name, object_type);
             }
         }
 

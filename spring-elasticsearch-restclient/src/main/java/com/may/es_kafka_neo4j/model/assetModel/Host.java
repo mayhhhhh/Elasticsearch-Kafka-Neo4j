@@ -25,5 +25,5 @@ public class Host {
 
     @Relationship(assetConsts.R_HAS_AN_IP)
     @NonNull
-    private Ip ip;
+    private assetIp ip;
 }

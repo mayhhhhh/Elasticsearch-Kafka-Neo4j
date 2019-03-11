@@ -7,6 +7,7 @@ import org.elasticsearch.search.SearchHit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.*;
+import org.apache.kafka.clients.consumer.*;
 
 import java.io.IOException;
 import java.util.List;
@@ -21,7 +22,7 @@ public class Controller {
     private KafkaTemplate<String, byte[]> esKafkaTemplate;
     private static final String TOPIC_ASSET = "asset_trial_34";
     private static final String TOPIC_FINDING = "finding_trial_34";
-    private static final String TOPIC_EVENT = "event_trial_34";
+    private static final String TOPIC_EVENT = "event_trial_311_1";
 
 
     public Controller(EsRepository esRepository) {

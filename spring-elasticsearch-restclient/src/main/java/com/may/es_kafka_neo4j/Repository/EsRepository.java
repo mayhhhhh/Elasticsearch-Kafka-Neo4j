@@ -19,7 +19,7 @@ public class EsRepository {
 
     private final String INDEX_ASSET = "asset-v2.0";
     private final String INDEX_FINDING = "finding-v2.0";
-    private final String INDEX_EVENT = "siem_meta_events_week_2018_50";
+    private final String INDEX_EVENT = "siem_meta_events_week_2018_18";
 
     //private final String TYPE = "device";
 
