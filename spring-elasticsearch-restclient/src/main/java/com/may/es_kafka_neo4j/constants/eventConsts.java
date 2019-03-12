@@ -10,4 +10,6 @@ public interface eventConsts {
     String R_HAS_EVENT = "R_HAS_EVENT";
     String R_HAS_SOURCE_SYSTEM = "R_HAS_SOURCE_SYSTEM";
     String R_HAS_PORT = "R_HAS_PORT";
+    String R_HAS_CONNECTION = "R_HAS_CONNECTION";
+    String R_HAS_HOST = "R_HAS_HOST";
 }

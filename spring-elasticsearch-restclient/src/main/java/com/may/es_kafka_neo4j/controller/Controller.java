@@ -22,7 +22,7 @@ public class Controller {
     private KafkaTemplate<String, byte[]> esKafkaTemplate;
     private static final String TOPIC_ASSET = "asset_trial_34";
     private static final String TOPIC_FINDING = "finding_trial_34";
-    private static final String TOPIC_EVENT = "event_trial_311_1";
+    private static final String TOPIC_EVENT = "event_trial_312";
 
 
     public Controller(EsRepository esRepository) {

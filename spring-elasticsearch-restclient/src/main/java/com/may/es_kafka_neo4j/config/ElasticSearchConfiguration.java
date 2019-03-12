@@ -48,17 +48,9 @@ public class ElasticSearchConfiguration extends AbstractFactoryBean<RestHighLeve
     }
 
     private RestHighLevelClient buildClient() {
-//        try {
-//            restHighLevelClient = new RestHighLevelClient(
-//                    RestClient.builder(
-//                            new HttpHost("localhost", 9200, "http"),
-//                            new HttpHost("localhost", 9201, "http")));
-//        } catch (Exception e) {
-//            logger.error(e.getMessage());
-//        }
         RestHighLevelClient restHighLevelClient = new RestHighLevelClient(
                 RestClient.builder(
-                        new HttpHost("esi1rvmm03-inc.tw-Test.net", 9200, "http")
+                        new HttpHost("esi2rvmm01-inb.tw-test.net", 9200, "http")
                 ).setRequestConfigCallback(new RestClientBuilder.RequestConfigCallback() {
                     @Override
                     public RequestConfig.Builder customizeRequestConfig(RequestConfig.Builder requestConfigBuilder) {

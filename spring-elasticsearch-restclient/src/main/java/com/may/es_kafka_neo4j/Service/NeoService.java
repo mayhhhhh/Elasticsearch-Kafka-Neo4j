@@ -6,7 +6,6 @@ import com.may.es_kafka_neo4j.Repository.eventRepository.*;
 import com.may.es_kafka_neo4j.Repository.eventRepository.IpRepository;
 import com.google.common.collect.Lists;
 import com.may.es_kafka_neo4j.model.eventModel.*;
-import org.apache.kafka.common.protocol.types.Field;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -129,148 +128,135 @@ public class NeoService {
     public void saveEventData(String e_id, String s_ip, String s_hostname, String s_port, String s_zone_id, String s_zone_name,
                               String t_ip, String t_hostname, String t_port, String t_zone_id, String t_zone_name,
                               String g_ip, String g_hostname, String g_port, String g_zone_id, String g_zone_name,
-                              String device_name, String device_id, String sourceSystem, String object_name, String object_type){
-        Ip sIp, tIp, gIp;
-        if(ipRepository.findByIp(s_ip).isPresent()){
-            sIp = ipRepository.findByIp(s_ip).get();
-        }
-        else{
-            sIp = Ip.of(s_ip);
-            ipRepository.save(sIp);
-        }
-        if(ipRepository.findByIp(t_ip).isPresent()){
-            tIp = ipRepository.findByIp(t_ip).get();
-        }
-        else{
-            tIp = Ip.of(t_ip);
-            ipRepository.save(tIp);
-        }
-        if(ipRepository.findByIp(g_ip).isPresent()){
-            gIp = ipRepository.findByIp(g_ip).get();
-        }
-        else{
-            gIp = Ip.of(g_ip);
-            ipRepository.save(gIp);
-        }
+                              String object_name, String object_type){
+//    public void saveEventData(String e_id, String s_ip, String s_hostname, String s_port, String s_zone_id, String s_zone_name,
+//            String t_ip, String t_hostname, String t_port, String t_zone_id, String t_zone_name,
+//            String g_ip, String g_hostname, String g_port, String g_zone_id, String g_zone_name,
+//            String device_name, String device_id, String sourceSystem, String object_name, String object_type){
 
         Port sPort, tPort, gPort;
-        if(portRepository.findByPort(s_port).isPresent()){
-            sPort = portRepository.findByPort(s_port).get();
+        sPort = savePort(s_port);
+        tPort = savePort(t_port);
+        gPort = savePort(g_port);
+
+        if(sPort.getPorts() != null) {
+            sPort.getPorts().add(tPort);
         }
         else{
-            sPort = Port.of(s_port);
-            portRepository.save(sPort);
+            sPort.setPorts(Lists.newArrayList(tPort));
         }
-        if(portRepository.findByPort(t_port).isPresent()){
-            tPort = portRepository.findByPort(t_port).get();
+        sPort.getPorts().add(tPort);
+
+        Host sHost, tHost, gHost;
+        sHost = saveHost(s_hostname, sPort);
+        tHost = saveHost(t_hostname, tPort);
+        gHost = saveHost(g_hostname, gPort);
+        if(!object_name.contains("Empty")){
+            Descriptors descriptors;
+            if(descriptorsRepository.findByObjectname(object_name).isPresent()){
+                descriptors = descriptorsRepository.findByObjectname(object_name).get();
+            }
+            else{
+                descriptors = Descriptors.of(object_name, object_type);
+                descriptorsRepository.save(descriptors);
+            }
+            if(tHost.getObjects() == null){
+                tHost.setObjects(Lists.newArrayList(descriptors));
+            }
+            else{
+                tHost.getObjects().add(descriptors);
+            }
         }
-        else{
-            tPort = Port.of(t_port);
-            portRepository.save(tPort);
-        }
-        if(portRepository.findByPort(g_port).isPresent()){
-            gPort = portRepository.findByPort(g_port).get();
-        }
-        else{
-            gPort = Port.of(g_port);
-            portRepository.save(gPort);
-        }
+
+        Ip sIp, tIp, gIp;
+        sIp = saveIp(s_ip, sHost);
+        tIp = saveIp(t_ip, tHost);
+        gIp = saveIp(g_ip, gHost);
 
         Zone sZone, tZone, gZone;
-        if(zoneRepository.findByZonename(s_zone_name).isPresent()){
-            sZone = zoneRepository.findByZonename(s_zone_name).get();
-        }
-        else{
-            sZone = Zone.of(s_zone_name, s_zone_id);
-            zoneRepository.save(sZone);
-        }
-        if(zoneRepository.findByZonename(t_zone_name).isPresent()){
-            tZone = zoneRepository.findByZonename(t_zone_name).get();
-        }
-        else{
-            tZone = Zone.of(t_zone_name, t_zone_id);
-            zoneRepository.save(tZone);
-        }
-        if(zoneRepository.findByZonename(g_zone_name).isPresent()){
-            gZone = zoneRepository.findByZonename(g_zone_name).get();
-        }
-        else{
-            gZone = Zone.of(g_zone_name, g_zone_id);
-            zoneRepository.save(gZone);
-        }
+        sZone = saveIpToZone(s_zone_id, s_zone_name, sIp);
+        tZone = saveIpToZone(t_zone_id, t_zone_name, tIp);
+        gZone = saveIpToZone(g_zone_id, g_zone_name, gIp);
 
 
+//        TargetField targetField = TargetField.of(t_hostname, tIp, tPort, tZone);
+//        GeneratorField generatorField = GeneratorField.of(g_hostname, gIp, gPort, gZone);
+//        SourceField sourceField = SourceField.of(s_hostname, sIp, sPort, sZone);
+//        targetFieldRepository.save(targetField);
+//        generatorFieldRepository.save(generatorField);
+//        sourceFieldRepository.save(sourceField);
 
-        TargetField targetField = TargetField.of(t_hostname, tIp, tPort, tZone);
-        GeneratorField generatorField = GeneratorField.of(g_hostname, gIp, gPort, gZone);
-        SourceField sourceField = SourceField.of(s_hostname, sIp, sPort, sZone);
-        targetFieldRepository.save(targetField);
-        generatorFieldRepository.save(generatorField);
-        sourceFieldRepository.save(sourceField);
-
-        Descriptors descriptors;
-        if(descriptorsRepository.findByObjectname(object_name).isPresent()){
-            descriptors = descriptorsRepository.findByObjectname(object_name).get();
-        }
-        else{
-            descriptors = Descriptors.of(object_name, object_type);
-            descriptorsRepository.save(descriptors);
-        }
-        Event event = Event.of(e_id, sourceField, targetField, generatorField, descriptors);
-        eventRepository.save(event);
-
-        SourceSystem source_System;
-        if(sourceSystemRepository.findBySourcesystem(sourceSystem).isPresent()){
-            source_System = sourceSystemRepository.findBySourcesystem(sourceSystem).get();
-            source_System.getEvents().add(event);
-        }
-        else{
-            source_System = SourceSystem.of(sourceSystem, Lists.newArrayList(event));
-            sourceSystemRepository.save(source_System);
-        }
-
-        Device device;
-        if(deviceRepository.findByDevicename(device_name).isPresent()){
-            device = deviceRepository.findByDevicename(device_name).get();
-            device.getSourceSystem().add(source_System);
-        }
-        else{
-            device = Device.of(device_name, Lists.newArrayList(source_System));
-            deviceRepository.save(device);
-        }
-
-
-
-
-
-
-
-
-
-
-//        if(targetFieldRepository.findByTargetField(t_ip).isPresent()){
-//            targetField = targetFieldRepository.findByTargetField(t_ip).get();
-//        }
-//        else{
-//            targetField = TargetField.of(t_ip);
-//            targetFieldRepository.save(targetField);
-//        }
-//        if(sourceFieldRepository.findBySourceField(s_ip).isPresent()){
-//            sourceField = sourceFieldRepository.findBySourceField(s_ip).get();
-//        }
-//        else{
-//            sourceField = SourceField.of(s_ip);
-//            sourceFieldRepository.save(sourceField);
-//        }
-//        if(generatorFieldRepository.findByGeneratorField(g_ip).isPresent()){
-//            generatorField = generatorFieldRepository.findByGeneratorField(g_ip).get();
-//        }
-//        else{
-//            generatorField = GeneratorField.of(g_ip);
-//            generatorFieldRepository.save(generatorField);
-//        }
-//        Event event = Event.of(e_id, sourceField, targetField, generatorField);
+//        Event event = Event.of(e_id, sourceField, targetField, generatorField, descriptors);
 //        eventRepository.save(event);
+//
+//        SourceSystem source_System;
+//        if(sourceSystemRepository.findBySourcesystem(sourceSystem).isPresent()){
+//            source_System = sourceSystemRepository.findBySourcesystem(sourceSystem).get();
+//            source_System.getEvents().add(event);
+//        }
+//        else{
+//            source_System = SourceSystem.of(sourceSystem, Lists.newArrayList(event));
+//            sourceSystemRepository.save(source_System);
+//        }
+//
+//        Device device;
+//        if(deviceRepository.findByDevicename(device_name).isPresent()){
+//            device = deviceRepository.findByDevicename(device_name).get();
+//            device.getSourceSystem().add(source_System);
+//        }
+//        else{
+//            device = Device.of(device_name, Lists.newArrayList(source_System));
+//            deviceRepository.save(device);
+//        }
 
+    }
+
+    private Host saveHost(String hostname, Port port) {
+        Host retHost;
+        if(hostRepository.findByHost(hostname).isPresent()){
+            retHost = hostRepository.findByHost(hostname).get();
+            retHost.getPorts().add(port);
+        }
+        else{
+            retHost = Host.of(hostname, Lists.newArrayList(port));
+            hostRepository.save(retHost);
+        }
+        return retHost;
+    }
+
+    private Ip saveIp(String ip, Host host) {
+        Ip retIp;
+        if (ipRepository.findByIp(ip).isPresent()) {
+            retIp = ipRepository.findByIp(ip).get();
+            retIp.getHosts().add(host);
+        } else {
+            retIp = Ip.of(ip, Lists.newArrayList(host));
+            ipRepository.save(retIp);
+        }
+        return retIp;
+    }
+
+    private Port savePort(String port) {
+        Port retPort;
+        if (portRepository.findByPort(port).isPresent()) {
+            retPort = portRepository.findByPort(port).get();
+        } else {
+            retPort = Port.of(port);
+            portRepository.save(retPort);
+        }
+        return retPort;
+    }
+
+    private Zone saveIpToZone(String zone_id, String zone_name, Ip ip) {
+        Zone zone;
+        if(zoneRepository.findByZonename(zone_name).isPresent()){
+            zone = zoneRepository.findByZonename(zone_name).get();
+            zone.getIps().add(ip);
+        }
+        else{
+            zone = Zone.of(zone_name, zone_id, Lists.newArrayList(ip));
+            zoneRepository.save(zone);
+        }
+        return zone;
     }
 }

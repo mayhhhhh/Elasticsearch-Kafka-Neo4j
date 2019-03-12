@@ -1,12 +1,17 @@
-package com.may.es_kafka_neo4j.model.assetModel;
+package com.may.es_kafka_neo4j.model.eventModel;
 
 import com.may.es_kafka_neo4j.config.CustomIdStrategy;
 import com.may.es_kafka_neo4j.constants.assetConsts;
+import com.may.es_kafka_neo4j.constants.eventConsts;
+import com.may.es_kafka_neo4j.model.assetModel.assetIp;
 import lombok.*;
 import org.neo4j.ogm.annotation.GeneratedValue;
 import org.neo4j.ogm.annotation.Id;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
+import sun.security.krb5.internal.crypto.Des;
+
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -23,7 +28,10 @@ public class Host {
     @NonNull
     private String host;
 
-    @Relationship(assetConsts.R_HAS_AN_IP)
+    @Relationship(eventConsts.R_HAS_PORT)
     @NonNull
-    private assetIp ip;
+    private List<Port> ports;
+
+    @Relationship(eventConsts.R_HAS_OBJECT)
+    private List<Descriptors> objects;
 }

@@ -2,10 +2,14 @@ package com.may.es_kafka_neo4j.model.eventModel;
 
 
 import com.may.es_kafka_neo4j.config.CustomIdStrategy;
+import com.may.es_kafka_neo4j.constants.eventConsts;
 import lombok.*;
 import org.neo4j.ogm.annotation.GeneratedValue;
 import org.neo4j.ogm.annotation.Id;
 import org.neo4j.ogm.annotation.NodeEntity;
+import org.neo4j.ogm.annotation.Relationship;
+
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -23,4 +27,8 @@ public class Zone {
 
     @NonNull
     private String zoneid;
+
+    @Relationship(eventConsts.R_HAS_IP)
+    @NonNull
+    private List<Ip> ips;
 }

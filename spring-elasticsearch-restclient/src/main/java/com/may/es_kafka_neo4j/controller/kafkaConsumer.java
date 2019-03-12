@@ -35,7 +35,7 @@ public class kafkaConsumer {
 
     }
 
-    @KafkaListener(topics = "event_trial_311_1",
+    @KafkaListener(topics = "event_trial_312",
             containerFactory = "eventsKafkaListenerFactory")
     public void consumeEvents(byte[] eventmsg) {
         consume(eventmsg, "Events");
@@ -72,7 +72,7 @@ public class kafkaConsumer {
         }
 
         if(type.equals("Events")){
-            if(hit.getType().equals("meta_event")) {
+            if(hit.getType().equals("event")) {
                 String s_ip = (map.get("s_ip") != null) ? map.get("s_ip").toString() : "Empty_s_ip";
                 String s_hostname = (map.get("s_hostname") != null) ? map.get("s_hostname").toString() : "Empty_s_hostname";
                 String s_port = (map.get("s_port") != null) ? map.get("s_port").toString() : "Empty_s_port";
@@ -90,9 +90,9 @@ public class kafkaConsumer {
                 //String g_zone_name = map.get("g_zone_name").toString();
                 String g_zone_name = (map.get("g_zone_name") != null) ? map.get("g_zone_name").toString() : "Empty_g_zone_name";
                 String g_zone_id = (map.get("g_zone_id") != null) ? map.get("g_zone_id").toString() : "Empty_g_zone_id";
-                String device_id = (map.get("device_id") != null) ? map.get("device_id").toString() : "Empty_device_id";
-                String device_name = (map.get("dyn_string_device_name") != null) ? map.get("dyn_string_device_name").toString() : "Empty_device_name";
-                String sourceSystem = (map.get("dyn_string_source_system") != null) ? map.get("dyn_string_source_system").toString() : "Empty source_system";
+//                String device_id = (map.get("device_id") != null) ? map.get("device_id").toString() : "Empty_device_id";
+//                String device_name = (map.get("dyn_string_device_name") != null) ? map.get("dyn_string_device_name").toString() : "Empty_device_name";
+//                String sourceSystem = (map.get("dyn_string_source_system") != null) ? map.get("dyn_string_source_system").toString() : "Empty source_system";
                 String object_name = (map.get("object_name") != null) ? map.get("object_name").toString() : "Empty_object_name";
                 String object_type = (map.get("object_type") != null) ? map.get("object_type").toString() : "Empty_object_type";
 
@@ -102,22 +102,27 @@ public class kafkaConsumer {
                 neoService.saveEventData(e_id, s_ip, s_hostname, s_port, s_zone_id, s_zone_name,
                         t_ip, t_hostname, t_port, t_zone_id, t_zone_name,
                         g_ip, g_hostname, g_port, g_zone_id, g_zone_name,
-                        device_name, device_id, sourceSystem, object_name, object_type);
+                        object_name, object_type);
+//                neoService.saveEventData(e_id, s_ip, s_hostname, s_port, s_zone_id, s_zone_name,
+//                        t_ip, t_hostname, t_port, t_zone_id, t_zone_name,
+//                        g_ip, g_hostname, g_port, g_zone_id, g_zone_name,
+//                        device_name, device_id, sourceSystem, object_name, object_type);
             }
         }
 
+        //System.out.println("Consumed successfully");
 
         String text = searchHits.get(0).toString();
 //        System.out.println(text);
-        try(FileWriter fw = new FileWriter(filePath, true);
-            BufferedWriter bw = new BufferedWriter(fw);
-            PrintWriter out = new PrintWriter(bw))
-        {
-            out.println(text);
-
-        } catch (IOException e) {
-            System.out.println("error writing to file");
-        }
+//        try(FileWriter fw = new FileWriter(filePath, true);
+//            BufferedWriter bw = new BufferedWriter(fw);
+//            PrintWriter out = new PrintWriter(bw))
+//        {
+//            out.println(text);
+//
+//        } catch (IOException e) {
+//            System.out.println("error writing to file");
+//        }
     }
 
 }
